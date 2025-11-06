@@ -295,7 +295,3 @@ Headless-only:
 - Feedback: open an issue in the public docs repository
 
 
-
----
-
-Also available: [Russian](./README_RU.md)
