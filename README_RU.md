@@ -1,8 +1,8 @@
-# AstraCRM Widget — Руководство по интеграции
+# AstraCRM Widget - Руководство по интеграции
 
 [English version](./README.md)
 
-Как встроить виджет заявок AstraCRM на ваш сайт. Скопируйте сниппет, настройте пару атрибутов — готово. Исходники читать не нужно (да и не получится — поставляется как UMD-бандл).
+Как встроить виджет заявок AstraCRM на ваш сайт. Скопируйте сниппет, настройте пару атрибутов - готово. Исходники читать не нужно (да и не получится - поставляется как UMD-бандл).
 
 Что внутри:
 - Кастомный элемент `astra-order-widget`, который просто работает
@@ -79,7 +79,7 @@
     mode="embedded"
     theme="light"
     widget-title="Оставить заявку"
-    widget-subtitle="Опишите проблему — мы перезвоним">
+    widget-subtitle="Опишите проблему - мы перезвоним">
   </astra-order-widget>
 </section>
 ```
@@ -117,7 +117,7 @@
 | `api-key` | string | - | Публичный ключ виджета. Либо задайте через `window.ASTRA_WIDGET_PUBLIC_KEY`. |
 | `api-url` | URL | `https://api.astracrm.pro/api/v1` (уже настроено) | Переопределить базовый URL API при необходимости. |
 | `mode` | `floating` · `embedded` · `headless` | `floating` | Режим работы.|
-| `theme` | `light` · `dark` · `auto` | `light` | Цветовая тема. `auto` — автоматический выбор по системной теме (prefers-color-scheme). |
+| `theme` | `light` · `dark` · `auto` | `light` | Цветовая тема. `auto` - автоматический выбор по системной теме (prefers-color-scheme). |
 | `locale` | `en` · `ru` | `en` | Язык UI/сообщений. |
 | `required-fields` | CSV ключей формы (`clientPhone,description,...`) | `clientPhone,description` | Какие поля обязательны. |
 | `position` | см. список позиций | `bottom-right` | Позиция плавающей кнопки (режим `floating`). |
@@ -151,13 +151,13 @@
 
 ## Безопасность и сеть
 
-Публичный ключ не секретный — он и должен быть в HTML. Все запросы идут по HTTPS, CORS обрабатывается автоматически на нашей стороне.
+Публичный ключ не секретный - он и должен быть в HTML. Все запросы идут по HTTPS, CORS обрабатывается автоматически на нашей стороне.
 
 ---
 
 ## Локализация
 
-Поставьте `locale="en"` или `locale="ru"` — язык интерфейса переключится. Заголовки всегда можно переопределить через `widget-title` и `widget-subtitle`.
+Поставьте `locale="en"` или `locale="ru"` - язык интерфейса переключится. Заголовки всегда можно переопределить через `widget-title` и `widget-subtitle`.
 
 ---
 
@@ -192,7 +192,7 @@ astra-order-widget {
 - `subServiceId`: опционально, UUID формат
 - `categoryOnly`: опционально, булево значение
 - `address`: опционально, максимум 500 символов
-- `addressSuggestion`: опционально, структурированный адрес из DaData — используется для формирования `addresses`
+- `addressSuggestion`: опционально, структурированный адрес из DaData - используется для формирования `addresses`
 
 Атрибут `required-fields` позволяет сделать поля обязательными или опциональными на вашей стороне.
 
@@ -210,17 +210,17 @@ astra-order-widget {
 
 Виджет выбрасывает кастомные события на сам элемент `astra-order-widget` (они всплывают вверх):
 
-- `widget:init` — виджет инициализируется
-- `widget:ready` — API готов к использованию
-- `widget:destroy` — виджет удаляется
-- `widget:form-change` — данные формы изменились
-- `widget:validation-change` — ошибки валидации обновились
-- `widget:submit-start` — началась отправка
-- `widget:submit-success` — заказ успешно создан
-- `widget:submit-error` — ошибка при отправке
-- `widget:state-change` — внутреннее состояние изменилось
-- `widget:step-change` — сменился шаг формы
-- `widget:error` — что-то пошло не так
+- `widget:init` - виджет инициализируется
+- `widget:ready` - API готов к использованию
+- `widget:destroy` - виджет удаляется
+- `widget:form-change` - данные формы изменились
+- `widget:validation-change` - ошибки валидации обновились
+- `widget:submit-start` - началась отправка
+- `widget:submit-success` - заказ успешно создан
+- `widget:submit-error` - ошибка при отправке
+- `widget:state-change` - внутреннее состояние изменилось
+- `widget:step-change` - сменился шаг формы
+- `widget:error` - что-то пошло не так
 
 Пример:
 
@@ -235,7 +235,7 @@ el.addEventListener('widget:submit-success', (e) => {
 
 ---
 
-## Headless API — краткая справка
+## Headless API - краткая справка
 
 После того как виджет готов, API доступен как `el.__ASTRA_WIDGET_API__`.
 
@@ -254,10 +254,10 @@ el.addEventListener('widget:submit-success', (e) => {
 
 ## Решение проблем
 
-- **"Missing widget public key"** — Добавьте атрибут `api-key` или установите `window.ASTRA_WIDGET_PUBLIC_KEY` до загрузки скрипта.
-- **Встроенный виджет не виден** — Проверьте, что контейнер имеет ширину и не скрыт CSS.
-- **Иконка кнопки не та** — Работают только эти иконки: `message`, `users`, `star`, `clock`.
-- **Ошибки CORS** — Убедитесь, что ваш домен добавлен в белый список в настройках CRM и используется HTTPS.
+- **"Missing widget public key"** - Добавьте атрибут `api-key` или установите `window.ASTRA_WIDGET_PUBLIC_KEY` до загрузки скрипта.
+- **Встроенный виджет не виден** - Проверьте, что контейнер имеет ширину и не скрыт CSS.
+- **Иконка кнопки не та** - Работают только эти иконки: `message`, `users`, `star`, `clock`.
+- **Ошибки CORS** - Убедитесь, что ваш домен добавлен в белый список в настройках CRM и используется HTTPS.
 
 ---
 

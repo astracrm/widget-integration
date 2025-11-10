@@ -1,4 +1,4 @@
-# AstraCRM Widget — Integration Guide
+# AstraCRM Widget - Integration Guide
 
 [Русская версия](./README_RU.md)
 
@@ -79,7 +79,7 @@ Renders right where you put it, like a normal form. Takes full width of its cont
     mode="embedded"
     theme="light"
     widget-title="Request a service"
-    widget-subtitle="Describe your issue — we'll call you back">
+    widget-subtitle="Describe your issue - we'll call you back">
   </astra-order-widget>
 </section>
 ```
@@ -112,7 +112,7 @@ Quick example:
 
 | Attribute | Type/values | Default | Purpose |
 |---|---|---|---|
-| `api-key` | string | — | Public widget key (or use `window.ASTRA_WIDGET_PUBLIC_KEY`). |
+| `api-key` | string | - | Public widget key (or use `window.ASTRA_WIDGET_PUBLIC_KEY`). |
 | `api-url` | URL | `https://api.astracrm.pro/api/v1` (already configured) | Override API base URL if needed. |
 | `mode` | `floating` · `embedded` · `headless` | `floating` | Display mode. |
 | `theme` | `light` · `dark` · `auto` | `light` | Color theme. `auto` follows system (prefers-color-scheme). |
@@ -149,7 +149,7 @@ Want to override something? Use `window.ASTRA_WIDGET_PUBLIC_KEY` or `window.ASTR
 
 ## Security & networking
 
-The public key isn't secret — it's meant to be in your HTML. All requests use HTTPS, and CORS is handled automatically on our side.
+The public key isn't secret - it's meant to be in your HTML. All requests use HTTPS, and CORS is handled automatically on our side.
 
 ---
 
@@ -204,17 +204,17 @@ On success, you get back `orderId` in the response.
 
 The widget fires custom events on itself (they bubble up too):
 
-- `widget:init` — widget is initializing
-- `widget:ready` — API is ready to use
-- `widget:destroy` — widget is being removed
-- `widget:form-change` — form data changed
-- `widget:validation-change` — validation errors updated
-- `widget:submit-start` — submission started
-- `widget:submit-success` — order created successfully
-- `widget:submit-error` — submission failed
-- `widget:state-change` — internal state changed
-- `widget:step-change` — form step changed
-- `widget:error` — something went wrong
+- `widget:init` - widget is initializing
+- `widget:ready` - API is ready to use
+- `widget:destroy` - widget is being removed
+- `widget:form-change` - form data changed
+- `widget:validation-change` - validation errors updated
+- `widget:submit-start` - submission started
+- `widget:submit-success` - order created successfully
+- `widget:submit-error` - submission failed
+- `widget:state-change` - internal state changed
+- `widget:step-change` - form step changed
+- `widget:error` - something went wrong
 
 Example:
 
@@ -246,10 +246,10 @@ What you can do:
 
 ## Troubleshooting
 
-- **"Missing widget public key"** — Add the `api-key` attribute or set `window.ASTRA_WIDGET_PUBLIC_KEY` before loading the script.
-- **Embedded widget not showing** — Make sure the container has width and isn't hidden by CSS.
-- **Button icon looks wrong** — Only these icons work: `message`, `users`, `star`, `clock`.
-- **CORS errors** — Make sure your domain is whitelisted in the CRM settings and you're using HTTPS.
+- **"Missing widget public key"** - Add the `api-key` attribute or set `window.ASTRA_WIDGET_PUBLIC_KEY` before loading the script.
+- **Embedded widget not showing** - Make sure the container has width and isn't hidden by CSS.
+- **Button icon looks wrong** - Only these icons work: `message`, `users`, `star`, `clock`.
+- **CORS errors** - Make sure your domain is whitelisted in the CRM settings and you're using HTTPS.
 
 ---
 
