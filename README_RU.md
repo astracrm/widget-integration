@@ -117,19 +117,20 @@
 | `api-key` | string | - | Публичный ключ виджета. Либо задайте через `window.ASTRA_WIDGET_PUBLIC_KEY`. |
 | `api-url` | URL | `https://api.astracrm.pro/api/v1` (уже настроено) | Переопределить базовый URL API при необходимости. |
 | `mode` | `floating` · `embedded` · `headless` | `floating` | Режим работы.|
-| `theme` | `light` · `dark` | `light` | Цветовая тема. |
+| `theme` | `light` · `dark` · `auto` | `light` | Цветовая тема. `auto` — автоматический выбор по системной теме (prefers-color-scheme). |
 | `locale` | `en` · `ru` | `en` | Язык UI/сообщений. |
 | `required-fields` | CSV ключей формы (`clientPhone,description,...`) | `clientPhone,description` | Какие поля обязательны. |
-| `show-service-selector` | `true` · `false` | `false` | Показывать выбор услуги/подуслуги. |
 | `position` | см. список позиций | `bottom-right` | Позиция плавающей кнопки (режим `floating`). |
 | `button-text` | string | автотекст по `locale` | Текст на кнопке (режим `floating`). |
-| `button-icon` | `message` · `users` · `star` · `clock` | `message` | Иконка кнопки (режим `floating`). |
+| `button-icon` | `message` · `users` · `star` · `clock` · `phone` · `message-square` · `map-pin` · `briefcase` · `user` | `message` | Иконка кнопки (режим `floating`). |
 | `widget-title` | string | автотекст | Заголовок формы (актуально для `embedded`/`floating` экрана приветствия). |
 | `widget-subtitle` | string | автотекст | Подзаголовок формы. |
 | `order-state` | `draft` · `distributing` | `draft` | Статус заказа: `draft` = только сохранён, `distributing` = сразу отправлен работникам. |
 | `debug` | `true` · `false` | `false` | Подробные логи событий и DOM‑ивенты. |
 
 Приоритет: явные атрибуты на теге > глобальные переменные `window.*`.
+
+Атрибуты только при инициализации: `mode`, `headless` и `debug` читаются один раз при старте. Дальнейшие изменения не применяются автоматически.
 
 ---
 
@@ -162,7 +163,7 @@
 
 ## Стилизация и темы
 
-Используйте `theme="light"` или `theme="dark"`. Нужна более тонкая настройка? Переопределите эти CSS-переменные:
+Используйте `theme="light"`, `theme="dark"` или `theme="auto"` (авто подстраивается под системную тему). Нужна более тонкая настройка? Переопределите эти CSS-переменные:
 
 ```css
 astra-order-widget {

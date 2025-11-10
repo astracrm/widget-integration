@@ -66,7 +66,7 @@ You can customize the button text and icon:
 </astra-order-widget>
 ```
 
-Available icons: `message` (default), `users`, `star`, `clock`.
+Available icons: `message` (default), `users`, `star`, `clock`, `phone`, `message-square`, `map-pin`, `briefcase`, `user`.
 
 ### Embedded block
 Renders right where you put it, like a normal form. Takes full width of its container. You can add your own title and subtitle.
@@ -115,19 +115,20 @@ Quick example:
 | `api-key` | string | — | Public widget key (or use `window.ASTRA_WIDGET_PUBLIC_KEY`). |
 | `api-url` | URL | `https://api.astracrm.pro/api/v1` (already configured) | Override API base URL if needed. |
 | `mode` | `floating` · `embedded` · `headless` | `floating` | Display mode. |
-| `theme` | `light` · `dark` | `light` | Color theme. |
+| `theme` | `light` · `dark` · `auto` | `light` | Color theme. `auto` follows system (prefers-color-scheme). |
 | `locale` | `en` · `ru` | `en` | UI language. |
 | `required-fields` | CSV (`clientPhone,description,...`) | `clientPhone,description` | Required fields. |
-| `show-service-selector` | `true` · `false` | `false` | Show service/subservice selector. |
 | `position` | see list | `bottom-right` | Floating button position. |
 | `button-text` | string | auto by `locale` | Floating button text. |
-| `button-icon` | `message` · `users` · `star` · `clock` | `message` | Floating button icon. |
+| `button-icon` | `message` · `users` · `star` · `clock` · `phone` · `message-square` · `map-pin` · `briefcase` · `user` | `message` | Floating button icon. |
 | `widget-title` | string | auto | Form title (embedded/floating welcome screen). |
 | `widget-subtitle` | string | auto | Form subtitle. |
 | `order-state` | `draft` · `distributing` | `draft` | Order status: `draft` = saved only, `distributing` = sent to workers immediately. |
 | `debug` | `true` · `false` | `false` | Verbose event logs + DOM events. |
 
 Priority: element attributes > `window.*` globals.
+
+Init-only attributes: `mode`, `headless` and `debug` are read on initialization. Changing them later won't re-mount the widget.
 
 ---
 
@@ -160,7 +161,7 @@ Set `locale="en"` or `locale="ru"` to switch the UI language. You can always ove
 
 ## Theming
 
-Use `theme="light"` or `theme="dark"`. Want more control? Override these CSS variables:
+Use `theme="light"`, `theme="dark"`, or `theme="auto"` (auto follows system). Want more control? Override these CSS variables:
 
 ```css
 astra-order-widget {
