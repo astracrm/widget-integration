@@ -153,7 +153,7 @@ The public key isn't secret - it's meant to be in your HTML. All requests use HT
 
 ### IDN domains and subdomains
 
-- IDN domains are supported: you can use `https://медвежата.рф` and we store it internally as punycode.
+- IDN domains are supported: you can use `https://терпение_и_труд.рф` and we store it internally as punycode.
 - If you have many subdomains, add a single wildcard origin: `https://*.yourdomain.tld` (works for Cyrillic domains too) so CORS covers all subdomains.
 
 ---
