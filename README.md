@@ -151,6 +151,11 @@ Want to override something? Use `window.ASTRA_WIDGET_PUBLIC_KEY` or `window.ASTR
 
 The public key isn't secret - it's meant to be in your HTML. All requests use HTTPS, and CORS is handled automatically on our side.
 
+### IDN domains and subdomains
+
+- IDN domains are supported: you can use `https://медвежата.рф` and we store it internally as punycode.
+- If you have many subdomains, add a single wildcard origin: `https://*.yourdomain.tld` (works for Cyrillic domains too) so CORS covers all subdomains.
+
 ---
 
 ## Localization
