@@ -35,8 +35,6 @@ Two ways to set it up:
 ```html
 <script>
   window.ASTRA_WIDGET_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';
-  // Optional: override API URL if needed
-  // window.ASTRA_WIDGET_API_BASE_URL = 'https://api.astracrm.pro';
 </script>
 <script src="https://cdn.astracrm.pro/widget/v1/astra-widget.umd.js"></script>
 
@@ -66,7 +64,7 @@ You can customize the button text and icon:
 </astra-order-widget>
 ```
 
-Available icons: `message` (default), `users`, `star`, `clock`, `phone`, `message-square`, `map-pin`, `briefcase`, `user`.
+Available icons: `message` (default), `users`, `star`, `clock`, `phone`, `chat` (alias for `message-square`), `message-square`, `map-pin`, `briefcase`, `user`.
 
 ### Embedded block
 Renders right where you put it, like a normal form. Takes full width of its container. You can add your own title and subtitle.
@@ -120,7 +118,7 @@ Quick example:
 | `required-fields` | CSV (`clientPhone,description,...`) | `clientPhone,description` | Required fields. |
 | `position` | see list | `bottom-right` | Floating button position. |
 | `button-text` | string | auto by `locale` | Floating button text. |
-| `button-icon` | `message` · `users` · `star` · `clock` · `phone` · `message-square` · `map-pin` · `briefcase` · `user` | `message` | Floating button icon. |
+| `button-icon` | `message` · `users` · `star` · `clock` · `phone` · `chat` (alias `message-square`) · `message-square` · `map-pin` · `briefcase` · `user` | `message` | Floating button icon. |
 | `widget-title` | string | auto | Form title (embedded/floating welcome screen). |
 | `widget-subtitle` | string | auto | Form subtitle. |
 | `order-state` | `draft` · `distributing` | `draft` | Order status: `draft` = saved only, `distributing` = sent to workers immediately. |
@@ -271,7 +269,6 @@ Copy these from AstraCRM UI (Widgets → Embed → Code):
 ```html
 <script>
   window.ASTRA_WIDGET_PUBLIC_KEY = 'pk_live_xxxxx';
-  window.ASTRA_WIDGET_API_BASE_URL = 'https://api.astracrm.com';
 </script>
 <script src="https://cdn.astracrm.pro/widget/v1/astra-widget.umd.js"></script>
 

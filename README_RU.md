@@ -35,8 +35,6 @@
 ```html
 <script>
   window.ASTRA_WIDGET_PUBLIC_KEY = 'ВАШ_ПУБЛИЧНЫЙ_КЛЮЧ';
-  // Опционально: свой API URL
-  // window.ASTRA_WIDGET_API_BASE_URL = 'https://api.astracrm.pro';
 </script>
 <script src="https://cdn.astracrm.pro/widget/v1/astra-widget.umd.js"></script>
 
@@ -66,7 +64,7 @@
 </astra-order-widget>
 ```
 
-Доступные иконки: `message` (по умолчанию), `users`, `star`, `clock`.
+Доступные иконки: `message` (по умолчанию), `users`, `star`, `clock`, `phone`, `chat` (алиас `message-square`), `message-square`, `map-pin`, `briefcase`, `user`.
 
 ### Встроенный блок
 Рендерится прямо там, где вы его поставили, как обычная форма. Занимает всю ширину контейнера. Можно задать свой заголовок и подзаголовок.
@@ -122,7 +120,7 @@
 | `required-fields` | CSV ключей формы (`clientPhone,description,...`) | `clientPhone,description` | Какие поля обязательны. |
 | `position` | см. список позиций | `bottom-right` | Позиция плавающей кнопки (режим `floating`). |
 | `button-text` | string | автотекст по `locale` | Текст на кнопке (режим `floating`). |
-| `button-icon` | `message` · `users` · `star` · `clock` · `phone` · `message-square` · `map-pin` · `briefcase` · `user` | `message` | Иконка кнопки (режим `floating`). |
+| `button-icon` | `message` · `users` · `star` · `clock` · `phone` · `chat` (алиас `message-square`) · `message-square` · `map-pin` · `briefcase` · `user` | `message` | Иконка кнопки (режим `floating`). |
 | `widget-title` | string | автотекст | Заголовок формы (актуально для `embedded`/`floating` экрана приветствия). |
 | `widget-subtitle` | string | автотекст | Подзаголовок формы. |
 | `order-state` | `draft` · `distributing` | `draft` | Статус заказа: `draft` = только сохранён, `distributing` = сразу отправлен работникам. |
@@ -279,7 +277,6 @@ el.addEventListener('widget:submit-success', (e) => {
 ```html
 <script>
   window.ASTRA_WIDGET_PUBLIC_KEY = 'pk_live_xxxxx';
-  window.ASTRA_WIDGET_API_BASE_URL = 'https://api.astracrm.com';
 </script>
 <script src="https://cdn.astracrm.pro/widget/v1/astra-widget.umd.js"></script>
 
