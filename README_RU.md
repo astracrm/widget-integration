@@ -87,6 +87,8 @@
 
 Включите `mode="headless"`, после инициализации используйте `__ASTRA_WIDGET_API__` на элементе. Есть и headless-бандл (`astra-widget.headless.umd.js`), если стили вообще не нужны.
 
+Подробное руководство по headless: [HEADLESS_INTEGRATION_RU.md](./HEADLESS_INTEGRATION_RU.md)
+
 Минимальный пример:
 ```html
 <script src="https://cdn.astracrm.pro/widget/v1/astra-widget.headless.umd.js"></script>
@@ -95,13 +97,13 @@
   const el = document.querySelector('astra-order-widget');
   el.addEventListener('widget:ready', async () => {
     const api = el.__ASTRA_WIDGET_API__;
-    api.setFormData({ clientPhone: '+79990000000', description: 'Нужен мастер' });
+    api.setFormData({ clientPhone: '79990000000', description: 'Нужен мастер' });
     if (api.isValid()) {
       const res = await api.submit();
       console.log('Создан заказ:', res.orderId);
     }
   }, { once: true });
-<\/script>
+</script>
 ```
 
 ---
@@ -112,23 +114,24 @@
 
 | Атрибут | Тип/значения | По умолчанию | Назначение |
 |---|---|---|---|
-| `api-key` | string | - | Публичный ключ виджета. Либо задайте через `window.ASTRA_WIDGET_PUBLIC_KEY`. |
-| `api-url` | URL | `https://api.astracrm.pro/api/v1` (уже настроено) | Переопределить базовый URL API при необходимости. |
+| `api-key` | string | — | Публичный ключ виджета. Либо задайте через `window.ASTRA_WIDGET_PUBLIC_KEY`. Без ключа будет ошибка “Missing widget public key”. |
+| `api-url` | URL (полный, с `/api/v1`) | `https://api.astracrm.pro/api/v1` | Переопределить базовый URL API. Для атрибута `/api/v1` не добавляется автоматически — укажите его сами. |
 | `mode` | `floating` · `embedded` · `headless` | `floating` | Режим работы.|
+| `headless` | boolean (`""`, `true`, `1`, `yes`) | false | Альтернативный флаг headless-режима (аналог `mode="headless"`). |
 | `theme` | `light` · `dark` · `auto` | `light` | Цветовая тема. `auto` - автоматический выбор по системной теме (prefers-color-scheme). |
 | `locale` | `en` · `ru` | `en` | Язык UI/сообщений. |
-| `required-fields` | CSV ключей формы (`clientPhone,description,...`) | `clientPhone,description` | Какие поля обязательны. |
+| `required-fields` | CSV ключей формы (`clientPhone,description,...`) | `clientPhone,description` | Какие поля обязательны дополнительно. Валидация всё равно требует валидный `serviceId`. |
 | `position` | см. список позиций | `bottom-right` | Позиция плавающей кнопки (режим `floating`). |
 | `button-text` | string | автотекст по `locale` | Текст на кнопке (режим `floating`). |
-| `button-icon` | `message` · `users` · `star` · `clock` · `phone` · `chat` (алиас `message-square`) · `message-square` · `map-pin` · `briefcase` · `user` | `message` | Иконка кнопки (режим `floating`). |
+| `button-icon` | `message` · `users` · `star` · `clock` · `phone` · `chat`/`message-square` · `map-pin` · `briefcase` · `user` | `message` | Иконка кнопки (режим `floating`). |
 | `widget-title` | string | автотекст | Заголовок формы (актуально для `embedded`/`floating` экрана приветствия). |
 | `widget-subtitle` | string | автотекст | Подзаголовок формы. |
 | `order-state` | `draft` · `distributing` | `draft` | Статус заказа: `draft` = только сохранён, `distributing` = сразу отправлен работникам. |
 | `debug` | `true` · `false` | `false` | Подробные логи событий и DOM‑ивенты. |
 
-Приоритет: явные атрибуты на теге > глобальные переменные `window.*`.
+Приоритет: явные атрибуты на теге > глобальные переменные `window.*`. Настройки виджета, приходящие с бэкенда (заголовок/подзаголовок/кнопка, mode/position, order-state, required-fields, locale), используются только как значения по умолчанию; если задали атрибут или меняете через headless `updateConfig`, берётся ваше значение. Брендинг/цвета и каталог всегда приходят с бэкенда.
 
-Атрибуты только при инициализации: `mode`, `headless` и `debug` читаются один раз при старте. Дальнейшие изменения не применяются автоматически.
+Только при инициализации: `mode`, `headless`, `debug` читаются один раз. Реактивно отслеживаются: `api-key`, `api-url`, `locale`, `widget-title`, `widget-subtitle`, `theme`, `required-fields`, `position`, `button-text`, `button-icon`, `order-state`.
 
 ---
 
@@ -136,7 +139,7 @@
 
 Всё работает из коробки. Просто скопируйте код из интерфейса AstraCRM (Виджеты → Встраивание → Код вставки) и вставьте. Виджет сам подключится к `https://api.astracrm.pro/api/v1`.
 
-Нужно что-то переопределить? Используйте `window.ASTRA_WIDGET_PUBLIC_KEY` или `window.ASTRA_WIDGET_API_BASE_URL` до загрузки скрипта.
+Если задаёте `api-url` вручную, укажите полный базовый URL сразу с `/api/v1` — атрибут не дописывает путь автоматически. Всегда задайте `api-key` (или `window.ASTRA_WIDGET_PUBLIC_KEY`) до загрузки скрипта.
 
 ---
 
@@ -188,16 +191,16 @@ astra-order-widget {
 
 ## Поля формы и валидация
 
-Что отправляется:
-- `clientPhone`: обязателен, формат `^((+?7)|8)?\d{10}$` (поддерживает +7/7/8 + 10 цифр)
-- `description`: обязателен, 1-1000 символов
-- `serviceId`: обязателен, UUID формат
-- `subServiceId`: опционально, UUID формат
-- `categoryOnly`: опционально, булево значение
-- `address`: опционально, максимум 500 символов
-- `addressSuggestion`: опционально, структурированный адрес из DaData - используется для формирования `addresses`
+Что валидируется на клиенте (ошибка при отправке):
+- `clientPhone`: обязателен, регекс `^7\\d{10}$` (ровно 11 цифр, начинается с `7`).
+- `description`: обязателен, 1–1000 символов.
+- `serviceId`: обязателен, UUID-подобный.
+- `subServiceId`: опционально, UUID-подобный.
+- `address`: опционально, ≤500 символов.
+- `addressSuggestion`: опционально, прокидывается как есть; если есть — маппится в `addresses` в запросе (предпочтительно для точного адреса).
+- `categoryOnly`: опционально; если true, подкатегория не отправляется.
 
-Атрибут `required-fields` позволяет сделать поля обязательными или опциональными на вашей стороне.
+`required-fields` добавляет только фронтовую проверку “заполните поля” (по умолчанию `clientPhone,description`); при этом валидация всё равно отвергнет пустой/невалидный `serviceId`.
 
 ---
 
@@ -213,17 +216,21 @@ astra-order-widget {
 
 Виджет выбрасывает кастомные события на сам элемент `astra-order-widget` (они всплывают вверх):
 
-- `widget:init` - виджет инициализируется
-- `widget:ready` - API готов к использованию
-- `widget:destroy` - виджет удаляется
-- `widget:form-change` - данные формы изменились
-- `widget:validation-change` - ошибки валидации обновились
-- `widget:submit-start` - началась отправка
-- `widget:submit-success` - заказ успешно создан
-- `widget:submit-error` - ошибка при отправке
-- `widget:state-change` - внутреннее состояние изменилось
-- `widget:step-change` - сменился шаг формы
-- `widget:error` - что-то пошло не так
+- `widget:init`
+- `widget:ready`
+- `widget:form-change`
+- `widget:submit-start`
+- `widget:submit-progress`
+- `widget:submit-success`
+- `widget:submit-error`
+- `widget:submit-complete`
+- `widget:state-change`
+- `widget:step-change`
+- `widget:error`
+- `widget:loading-change`
+- `widget:service-categories-load`
+- `widget:service-categories-error`
+- `widget:service-select`
 
 Пример:
 
@@ -249,8 +256,9 @@ el.addEventListener('widget:submit-success', (e) => {
 - **Состояния**: `getState()`, `getCurrentStep()`, `goToStep(step)`
 - **Отправка**: `submit()` возвращает `{ orderId, status, message, data? }`, `reset()`
 - **Сервисы**: `loadServices()`, `selectService(categoryId, subcategoryId?)`, `getSelectedService()`
+- **Адреса**: `suggestAddress(query)`
 - **События**: `on`, `off`, `emit`
-- **Очистка**: `destroy()`
+- **Очистка**: `destroy()` (заглушка)
 
 
 ---
@@ -259,7 +267,7 @@ el.addEventListener('widget:submit-success', (e) => {
 
 - **"Missing widget public key"** - Добавьте атрибут `api-key` или установите `window.ASTRA_WIDGET_PUBLIC_KEY` до загрузки скрипта.
 - **Встроенный виджет не виден** - Проверьте, что контейнер имеет ширину и не скрыт CSS.
-- **Иконка кнопки не та** - Работают только эти иконки: `message`, `users`, `star`, `clock`.
+- **Иконка кнопки не та** - Работают только эти иконки: `message`, `users`, `star`, `clock`, `phone`, `chat`/`message-square`, `map-pin`, `briefcase`, `user`.
 - **Ошибки CORS** - Убедитесь, что ваш домен добавлен в белый список в настройках CRM и используется HTTPS.
 
 ---

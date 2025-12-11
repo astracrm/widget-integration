@@ -87,6 +87,8 @@ Widget handles validation and API calls, but you build your own UI. Perfect when
 
 Set `mode="headless"`, then use `__ASTRA_WIDGET_API__` on the element once it's ready. There's also a headless-only bundle (`astra-widget.headless.umd.js`) if you don't want any styles loaded.
 
+Full headless integration guide: [HEADLESS_INTEGRATION_EN.md](./HEADLESS_INTEGRATION_EN.md)
+
 Quick example:
 ```html
 <script src="https://cdn.astracrm.pro/widget/v1/astra-widget.headless.umd.js"></script>
@@ -95,13 +97,13 @@ Quick example:
   const el = document.querySelector('astra-order-widget');
   el.addEventListener('widget:ready', async () => {
     const api = el.__ASTRA_WIDGET_API__;
-    api.setFormData({ clientPhone: '+15550001122', description: 'Need technician' });
+    api.setFormData({ clientPhone: '79990000000', description: 'Need technician' });
     if (api.isValid()) {
       const res = await api.submit();
       console.log('Order created:', res.orderId);
     }
   }, { once: true });
-<\/script>
+</script>
 ```
 
 ---
@@ -110,23 +112,24 @@ Quick example:
 
 | Attribute | Type/values | Default | Purpose |
 |---|---|---|---|
-| `api-key` | string | - | Public widget key (or use `window.ASTRA_WIDGET_PUBLIC_KEY`). |
-| `api-url` | URL | `https://api.astracrm.pro/api/v1` (already configured) | Override API base URL if needed. |
+| `api-key` | string | — | Public widget key. Or set `window.ASTRA_WIDGET_PUBLIC_KEY` before loading the script. Missing key throws “Missing widget public key”. |
+| `api-url` | URL (must be full, incl. `/api/v1`) | `https://api.astracrm.pro/api/v1` | Override API base. No auto-append of `/api/v1` when you pass an attribute. |
 | `mode` | `floating` · `embedded` · `headless` | `floating` | Display mode. |
+| `headless` | boolean (`""`, `true`, `1`, `yes`) | false | Alternative switch for headless mode (same as `mode="headless"`). |
 | `theme` | `light` · `dark` · `auto` | `light` | Color theme. `auto` follows system (prefers-color-scheme). |
 | `locale` | `en` · `ru` | `en` | UI language. |
-| `required-fields` | CSV (`clientPhone,description,...`) | `clientPhone,description` | Required fields. |
+| `required-fields` | CSV (`clientPhone,description,...`) | `clientPhone,description` | Extra required fields enforced before submit. Validation still enforces `serviceId` UUID. |
 | `position` | see list | `bottom-right` | Floating button position. |
 | `button-text` | string | auto by `locale` | Floating button text. |
-| `button-icon` | `message` · `users` · `star` · `clock` · `phone` · `chat` (alias `message-square`) · `message-square` · `map-pin` · `briefcase` · `user` | `message` | Floating button icon. |
+| `button-icon` | `message` · `users` · `star` · `clock` · `phone` · `chat`/`message-square` · `map-pin` · `briefcase` · `user` | `message` | Floating button icon. |
 | `widget-title` | string | auto | Form title (embedded/floating welcome screen). |
 | `widget-subtitle` | string | auto | Form subtitle. |
-| `order-state` | `draft` · `distributing` | `draft` | Order status: `draft` = saved only, `distributing` = sent to workers immediately. |
+| `order-state` | `draft` · `distributing` | `draft` | Order status passed to backend. |
 | `debug` | `true` · `false` | `false` | Verbose event logs + DOM events. |
 
-Priority: element attributes > `window.*` globals.
+Priority: explicit attributes > `window.*` globals. Backend widget settings (title/subtitle/button text/icon, mode/position, order-state, required-fields, locale) are used only as defaults; if you set an attribute or override via headless `updateConfig`, your value wins. Branding/colors and service catalog still come from backend.
 
-Init-only attributes: `mode`, `headless` and `debug` are read on initialization. Changing them later won't re-mount the widget.
+Init-only (read once): `mode`, `headless`, `debug`. Reactive (watched): `api-key`, `api-url`, `locale`, `widget-title`, `widget-subtitle`, `theme`, `required-fields`, `position`, `button-text`, `button-icon`, `order-state`.
 
 ---
 
@@ -134,7 +137,7 @@ Init-only attributes: `mode`, `headless` and `debug` are read on initialization.
 
 Most things work out of the box. Grab the code snippet from AstraCRM UI (Widgets → Embed → Code) and paste it. The widget connects to `https://api.astracrm.pro/api/v1` automatically.
 
-Want to override something? Use `window.ASTRA_WIDGET_PUBLIC_KEY` or `window.ASTRA_WIDGET_API_BASE_URL` before loading the script.
+If you set `api-url` yourself, pass the full base including `/api/v1`—it is not auto-appended for the attribute override. Always define `api-key` (or `window.ASTRA_WIDGET_PUBLIC_KEY`) before loading the script.
 
 ---
 
@@ -182,16 +185,16 @@ astra-order-widget {
 
 ## Form fields & validation
 
-What gets sent:
-- `clientPhone`: required, format `^((+?7)|8)?\d{10}$` (supports +7/7/8 + 10 digits)
-- `description`: required, 1-1000 characters
-- `serviceId`: required, UUID format
-- `subServiceId`: optional, UUID format
-- `categoryOnly`: optional boolean
-- `address`: optional, max 500 characters
-- `addressSuggestion`: optional, structured address from DaData
+What is validated client-side (hard failure on submit):
+- `clientPhone`: required, regex `^7\\d{10}$` (exactly 11 digits starting with `7`).
+- `description`: required, 1–1000 chars.
+- `serviceId`: required, UUID-like.
+- `subServiceId`: optional, UUID-like.
+- `address`: optional, ≤500 chars.
+- `addressSuggestion`: optional, passed through as-is; if present it is mapped to `addresses` in the request (structured DaData fields kept).
+- `categoryOnly`: optional boolean; if true, subcategory is skipped.
 
-Use the `required-fields` attribute to make fields optional or required on your end.
+`required-fields` only adds frontend “please fill” checks (default `clientPhone,description`); validation still rejects missing/invalid `serviceId`.
 
 ---
 
@@ -205,19 +208,23 @@ On success, you get back `orderId` in the response.
 
 ## DOM events
 
-The widget fires custom events on itself (they bubble up too):
+Emitted on the element (bubble up):
 
-- `widget:init` - widget is initializing
-- `widget:ready` - API is ready to use
-- `widget:destroy` - widget is being removed
-- `widget:form-change` - form data changed
-- `widget:validation-change` - validation errors updated
-- `widget:submit-start` - submission started
-- `widget:submit-success` - order created successfully
-- `widget:submit-error` - submission failed
-- `widget:state-change` - internal state changed
-- `widget:step-change` - form step changed
-- `widget:error` - something went wrong
+- `widget:init`
+- `widget:ready`
+- `widget:form-change`
+- `widget:submit-start`
+- `widget:submit-progress`
+- `widget:submit-success`
+- `widget:submit-error`
+- `widget:submit-complete`
+- `widget:state-change`
+- `widget:step-change`
+- `widget:error`
+- `widget:loading-change`
+- `widget:service-categories-load`
+- `widget:service-categories-error`
+- `widget:service-select`
 
 Example:
 
@@ -232,17 +239,17 @@ el.addEventListener('widget:submit-success', (e) => {
 
 ## Headless API quick reference
 
-Once the widget is ready, grab the API from `el.__ASTRA_WIDGET_API__`.
+After `widget:ready`, the API is on `el.__ASTRA_WIDGET_API__`:
 
-What you can do:
 - **Config**: `getConfig()`, `updateConfig(partial)`
 - **Form data**: `getFormData()`, `setFormData(partial)`, `clearFormData()`
 - **Validation**: `validate(field?)`, `isValid()`
-- **State**: `getState()`, `getCurrentStep()`, `goToStep(step)`
-- **Submit**: `submit()` returns `{ orderId, status, message, data? }`, `reset()`
+- **State**: `getState()` (simplified), `getCurrentStep()`, `goToStep(step)`
+- **Submit**: `submit()`, `reset()`
 - **Services**: `loadServices()`, `selectService(categoryId, subcategoryId?)`, `getSelectedService()`
+- **Address**: `suggestAddress(query)`
 - **Events**: `on`, `off`, `emit`
-- **Cleanup**: `destroy()`
+- **Cleanup**: `destroy()` (no-op)
 
 
 ---
@@ -251,7 +258,7 @@ What you can do:
 
 - **"Missing widget public key"** - Add the `api-key` attribute or set `window.ASTRA_WIDGET_PUBLIC_KEY` before loading the script.
 - **Embedded widget not showing** - Make sure the container has width and isn't hidden by CSS.
-- **Button icon looks wrong** - Only these icons work: `message`, `users`, `star`, `clock`.
+- **Button icon looks wrong** - Only these icons work: `message`, `users`, `star`, `clock`, `phone`, `chat`/`message-square`, `map-pin`, `briefcase`, `user`.
 - **CORS errors** - Make sure your domain is whitelisted in the CRM settings and you're using HTTPS.
 
 ---
