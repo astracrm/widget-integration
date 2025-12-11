@@ -1,4 +1,4 @@
-# AstraCRM Widget — Headless Integration
+# AstraCRM Widget - Headless Integration
 
 [Русская версия](./HEADLESS_INTEGRATION_RU.md)
 
@@ -340,7 +340,7 @@ import { HeadlessRenderer } from 'astra-widget'
         </>
       )}
       {currentStep === 'success' && <div>Submitted</div>}
-      {currentStep === 'error' && <div>Failed — check errors</div>}
+      {currentStep === 'error' && <div>Failed - check errors</div>}
     </div>
   )}
 </HeadlessRenderer>

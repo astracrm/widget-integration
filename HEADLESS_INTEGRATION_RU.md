@@ -1,8 +1,8 @@
-# AstraCRM Widget — Headless интеграция
+# AstraCRM Widget - Headless интеграция
 
 [English version](./HEADLESS_INTEGRATION_EN.md)
 
-Headless-режим даёт бизнес-логику, валидацию и API вызовы виджета без UI. Элемент ничего не рисует — весь интерфейс делаете вы. Подходит, когда нужен свой дизайн, но хочется готовые проверки, каталог услуг, подсказки адресов и процесс отправки.
+Headless-режим даёт бизнес-логику, валидацию и API вызовы виджета без UI. Элемент ничего не рисует - весь интерфейс делаете вы. Подходит, когда нужен свой дизайн, но хочется готовые проверки, каталог услуг, подсказки адресов и процесс отправки.
 
 `widget:ready` срабатывает только при корректной конфигурации. Если атрибуты заданы неверно, события не будет (API не прикрепится).
 
@@ -111,7 +111,7 @@ Headless-режим даёт бизнес-логику, валидацию и AP
 - `onServiceSelect(selectedService)`
 
 ### DOM события (`widget:*`)
-Названия — camelCase → kebab-case от списка выше, payload в `event.detail`:
+Названия - camelCase → kebab-case от списка выше, payload в `event.detail`:
 
 - `widget:init`
 - `widget:ready`
@@ -340,13 +340,13 @@ import { HeadlessRenderer } from 'astra-widget'
         </>
       )}
       {currentStep === 'success' && <div>Submitted</div>}
-      {currentStep === 'error' && <div>Failed — check errors</div>}
+      {currentStep === 'error' && <div>Failed - check errors</div>}
     </div>
   )}
 </HeadlessRenderer>
 ```
 
-Базовая машина состояний простая (`form` → `submitting` → `success | error`). Дополнительные шаги (`service-selection`, `review`) — для вашей логики; переходы между ними виджет не навязывает.
+Базовая машина состояний простая (`form` → `submitting` → `success | error`). Дополнительные шаги (`service-selection`, `review`) - для вашей логики; переходы между ними виджет не навязывает.
 
 ---
 
@@ -371,11 +371,11 @@ import type {
 ## Рекомендации
 - Валидируйте по change/blur, а не по таймеру. Вызывайте `api.validate(field)` и показывайте сообщения.
 - Всегда ждите `widget:ready` перед обращением к `__ASTRA_WIDGET_API__`.
-- `getState().currentStep` упрощён (`form | success | error`); полный набор шагов — в `getCurrentStep()`.
+- `getState().currentStep` упрощён (`form | success | error`); полный набор шагов - в `getCurrentStep()`.
 - `goToStep('form')` сбрасывает форму; вызывайте осознанно.
 - Обрабатывайте `fieldErrors` в ошибках отправки, чтобы подсветить конкретные поля.
 - Телефон: нормализуйте до цифр (и добавляйте префиксы при необходимости) до `setFormData` или перед отправкой.
-- Адрес: в headless-режиме UI нет — используйте `suggestAddress`, выбранную подсказку кладите в `addressSuggestion` (и при желании дублируйте в `address` для отображения).
+- Адрес: в headless-режиме UI нет - используйте `suggestAddress`, выбранную подсказку кладите в `addressSuggestion` (и при желании дублируйте в `address` для отображения).
 
 ---
 

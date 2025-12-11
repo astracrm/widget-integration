@@ -112,7 +112,7 @@ Quick example:
 
 | Attribute | Type/values | Default | Purpose |
 |---|---|---|---|
-| `api-key` | string | — | Public widget key. Or set `window.ASTRA_WIDGET_PUBLIC_KEY` before loading the script. Missing key throws “Missing widget public key”. |
+| `api-key` | string | - | Public widget key. Or set `window.ASTRA_WIDGET_PUBLIC_KEY` before loading the script. Missing key throws “Missing widget public key”. |
 | `api-url` | URL (must be full, incl. `/api/v1`) | `https://api.astracrm.pro/api/v1` | Override API base. No auto-append of `/api/v1` when you pass an attribute. |
 | `mode` | `floating` · `embedded` · `headless` | `floating` | Display mode. |
 | `headless` | boolean (`""`, `true`, `1`, `yes`) | false | Alternative switch for headless mode (same as `mode="headless"`). |
@@ -137,7 +137,7 @@ Init-only (read once): `mode`, `headless`, `debug`. Reactive (watched): `api-key
 
 Most things work out of the box. Grab the code snippet from AstraCRM UI (Widgets → Embed → Code) and paste it. The widget connects to `https://api.astracrm.pro/api/v1` automatically.
 
-If you set `api-url` yourself, pass the full base including `/api/v1`—it is not auto-appended for the attribute override. Always define `api-key` (or `window.ASTRA_WIDGET_PUBLIC_KEY`) before loading the script.
+If you set `api-url` yourself, pass the full base including `/api/v1`-it is not auto-appended for the attribute override. Always define `api-key` (or `window.ASTRA_WIDGET_PUBLIC_KEY`) before loading the script.
 
 ---
 
