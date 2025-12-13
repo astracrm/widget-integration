@@ -9,6 +9,7 @@ What you get:
 - Three modes: floating button, embedded block, or headless (no UI)
 - Single UMD bundle from CDN, or a headless-only version if you don't need styles
 - CDN: `https://cdn.astracrm.pro/widget/v1/astra-widget.umd.js`
+- CDN serves the bundle **gzipped** (`Content-Encoding: gzip`) — browsers decode automatically.
 - Needs: modern browser, HTTPS, and a public widget key
 
 ---
