@@ -9,7 +9,7 @@
 - Три режима: плавающая кнопка, встроенный блок или headless (без UI)
 - Один UMD-файл с CDN, или headless-версия без стилей
 - CDN: `https://cdn.astracrm.pro/widget/v1/astra-widget.umd.js`
-- CDN отдаёт бандл **в gzip** (`Content-Encoding: gzip`) — браузер распакует автоматически.
+- CDN отдаёт бандл **в gzip** (`Content-Encoding: gzip`) - браузер распакует автоматически.
 - Нужно: современный браузер, HTTPS и публичный ключ виджета
 
 ---
